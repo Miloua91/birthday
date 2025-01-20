@@ -1,5 +1,8 @@
+import { useEffect, useRef, Suspense } from "react";
+import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
+import { Html, useProgress } from "@react-three/drei";
 import "./App.css";
 
 import { useGLTF } from "@react-three/drei";
@@ -249,40 +252,44 @@ function App() {
       <div id="canvas-container">
         <span hidden>Happy Birthday Motherucker</span>
         <Canvas>
-          <PerspectiveCamera makeDefault position={[6, 3, 0]} />
-          <OrbitControls target={[0, 0, 0]} />
-          <ambientLight intensity={1} />
-          <directionalLight ref={lightRef} color="white" position={[5, 5, 5]} />
-          <mesh position={[0, 0, 0]}>
-            <Room />
-            <ArcadeOne />
-            <ArcadeTwo />
-            <ArcadeThree />
-            <ArcadeFour />
-            <PinBall />
-            <Couch />
-            <Table />
-            <Cake />
-            <Plates />
-            <ForkOne />
-            <ForkTwo />
-            <ForkThree />
-            <ForkFour />
-            <Katana />
-            <TvWithVideo />
-            <TvTable />
-            <Ps5 />
-            <Books />
-            <Ballons />
-          </mesh>
+          <Suspense fallback={<LoadingScreen />}>
+            <LoadingScreen />
+            <PerspectiveCamera makeDefault position={[6, 3, 0]} />
+            <OrbitControls target={[0, 0, 0]} />
+            <ambientLight intensity={1} />
+            <directionalLight
+              ref={lightRef}
+              color="white"
+              position={[5, 5, 5]}
+            />
+            <mesh position={[0, 0, 0]}>
+              <Room />
+              <ArcadeOne />
+              <ArcadeTwo />
+              <ArcadeThree />
+              <ArcadeFour />
+              <PinBall />
+              <Couch />
+              <Table />
+              <Cake />
+              <Plates />
+              <ForkOne />
+              <ForkTwo />
+              <ForkThree />
+              <ForkFour />
+              <Katana />
+              <TvWithVideo />
+              <TvTable />
+              <Ps5 />
+              <Books />
+              <Ballons />
+            </mesh>
+          </Suspense>
         </Canvas>
       </div>
     </>
   );
 }
-
-import { useEffect, useRef } from "react";
-import * as THREE from "three";
 
 function TvWithVideo() {
   const gltf = useGLTF("/tv.glb");
@@ -332,6 +339,30 @@ function TvWithVideo() {
       rotation={[0, 0, 0]}
       scale={[1.2, 1.2, 1]}
     />
+  );
+}
+
+function LoadingScreen() {
+  const { progress } = useProgress(); // Track loading progress
+
+  return (
+    <Html center>
+      <div
+        style={{
+          width: 300,
+          textAlign: "center",
+          background: "rgba(0, 0, 0, 0.8)",
+          color: "white",
+          padding: "20px",
+          borderRadius: "10px",
+          fontSize: "24px",
+          fontWeight: "bold",
+        }}
+      >
+        🎉 Happy Birthday Madjid! My Ninja 🎂 <br />
+        Loading... {Math.round(progress)}%
+      </div>
+    </Html>
   );
 }
 
