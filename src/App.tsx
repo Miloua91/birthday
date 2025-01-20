@@ -253,7 +253,6 @@ function App() {
         <span hidden>Happy Birthday Motherucker</span>
         <Canvas>
           <Suspense fallback={<LoadingScreen />}>
-            <LoadingScreen />
             <PerspectiveCamera makeDefault position={[6, 3, 0]} />
             <OrbitControls target={[0, 0, 0]} />
             <ambientLight intensity={1} />
