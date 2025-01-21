@@ -1,5 +1,6 @@
 import { useEffect, useRef, Suspense } from "react";
 import * as THREE from "three";
+import { useFBX } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
 import { Html, useProgress } from "@react-three/drei";
@@ -8,6 +9,46 @@ import "./App.css";
 import { useGLTF } from "@react-three/drei";
 
 useGLTF.preload("/bed.glb");
+
+function Flair() {
+  const fbx = useFBX("/swing.fbx");
+  const mixer = useRef<THREE.AnimationMixer | null>(null);
+
+  useEffect(() => {
+    if (fbx) {
+      mixer.current = new THREE.AnimationMixer(fbx);
+
+      fbx.animations.forEach((clip) => {
+        const action = mixer.current!.clipAction(clip);
+        action.play();
+        action.setLoop(THREE.LoopRepeat, Infinity);
+      });
+
+      const animate = () => {
+        if (mixer.current) {
+          mixer.current.update(0.02);
+        }
+        requestAnimationFrame(animate);
+      };
+      animate();
+    }
+
+    return () => {
+      if (mixer.current) {
+        mixer.current.stopAllAction();
+      }
+    };
+  }, []);
+
+  return (
+    <primitive
+      object={fbx}
+      scale={[0.8, 0.8, 0.8]}
+      position={[2.1, 0, -0.8]}
+      rotation={[0, 0, 0]}
+    />
+  );
+}
 
 function Room() {
   const gltf = useGLTF("/bed.glb");
@@ -205,6 +246,30 @@ function Ps5() {
   );
 }
 
+function Ps5Controller() {
+  const gltf = useGLTF("/ps5_controller.glb");
+  return (
+    <primitive
+      object={gltf.scene}
+      position={[0.77, 0.395, -1.9]}
+      rotation={[1.36, 2.7, 5.22]}
+      scale={[0.001, 0.001, 0.001]}
+    />
+  );
+}
+
+function Goku() {
+  const gltf = useGLTF("/goku_3d_scan_dragon_ball.glb");
+  return (
+    <primitive
+      object={gltf.scene}
+      position={[0.36, 0.402, -2]}
+      rotation={[0.1, 0, 0]}
+      scale={[0.02, 0.02, 0.02]}
+    />
+  );
+}
+
 function Books() {
   const gltf = useGLTF("/childhood_books.glb");
   return (
@@ -236,15 +301,15 @@ function App() {
     let time = 0;
     const animateLight = () => {
       if (lightRef.current) {
-        time += 0.01; // Increase time for the animation
+        time += 0.01;
         const color = new THREE.Color();
-        color.setHSL(time % 1, 1, 0.5); // This will cycle through a full rainbow (HSL)
+        color.setHSL(time % 1, 1, 0.5);
         lightRef.current.color.set(color);
       }
-      requestAnimationFrame(animateLight); // Continue animation loop
+      requestAnimationFrame(animateLight);
     };
 
-    animateLight(); // Start the animation loop
+    animateLight();
   }, []);
 
   return (
@@ -280,8 +345,11 @@ function App() {
               <TvWithVideo />
               <TvTable />
               <Ps5 />
+              <Ps5Controller />
+              <Goku />
               <Books />
               <Ballons />
+              <Flair />
             </mesh>
           </Suspense>
         </Canvas>
@@ -295,7 +363,6 @@ function TvWithVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    // Create a video element
     const video = document.createElement("video");
     video.src = "/music.mp4";
     video.crossOrigin = "anonymous";
@@ -306,7 +373,6 @@ function TvWithVideo() {
     videoTexture.magFilter = THREE.LinearFilter;
     videoTexture.format = THREE.RGBFormat;
 
-    // Find the screen mesh in the TV model
     const screenMesh = gltf.scene.getObjectByName("TV_49Zoll_Screen1_0");
     if (screenMesh && screenMesh instanceof THREE.Mesh) {
       videoTexture.repeat.set(1.8, 3);
@@ -315,12 +381,10 @@ function TvWithVideo() {
 
     videoRef.current = video;
 
-    // Wait for user interaction to play the video
     const handleUserInteraction = () => {
       if (videoRef.current) {
         videoRef.current.play();
       }
-      // Remove the event listener after first interaction
       window.removeEventListener("click", handleUserInteraction);
     };
 
@@ -342,7 +406,7 @@ function TvWithVideo() {
 }
 
 function LoadingScreen() {
-  const { progress } = useProgress(); // Track loading progress
+  const { progress } = useProgress();
 
   return (
     <Html center>
