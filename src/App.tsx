@@ -38,7 +38,7 @@ function Flair() {
         mixer.current.stopAllAction();
       }
     };
-  }, []);
+  }, [fbx]);
 
   return (
     <primitive
