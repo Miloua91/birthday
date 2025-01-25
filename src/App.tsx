@@ -78,26 +78,50 @@ function ArcadeTwo() {
   );
 }
 
-function ArcadeThree() {
-  const gltf = useGLTF("/arcade_machine.glb");
+function BedTableOne() {
+  const gltf = useGLTF("/anderson_bedside_table_mango_wood.glb");
   return (
     <primitive
       object={gltf.scene}
-      position={[-0.9, 0, 1.88]}
-      rotation={[0, Math.PI / 2, 0]}
-      scale={[0.11, 0.13, 0.13]}
+      position={[-0.9, 0, 1.65]}
+      rotation={[0, Math.PI, 0]}
+      scale={[0.015, 0.015, 0.015]}
     />
   );
 }
 
-function ArcadeFour() {
-  const gltf = useGLTF("/metal_gear_solid_arcade_machine.glb");
+function BedTableTwo() {
+  const gltf = useGLTF("/jenson_bedside_table_dark_stain_oak.glb");
   return (
     <primitive
       object={gltf.scene}
       position={[2.1, 0, 1.76]}
-      rotation={[0, -Math.PI / 2, 0]}
-      scale={[0.22, 0.28, 0.35]}
+      rotation={[0, Math.PI, 0]}
+      scale={[0.012, 0.012, 0.012]}
+    />
+  );
+}
+
+function Speaker() {
+  const gltf = useGLTF("/dusty_speaker.glb");
+  return (
+    <primitive
+      object={gltf.scene}
+      position={[-0.885, 0.6, 1.65]}
+      rotation={[0, Math.PI, 0]}
+      scale={[0.22, 0.22, 0.22]}
+    />
+  );
+}
+
+function RecordPlayer() {
+  const gltf = useGLTF("/yamaha_tt-300_record_player.glb");
+  return (
+    <primitive
+      object={gltf.scene}
+      position={[2.1, 0.696, 1.7]}
+      rotation={[0, Math.PI, 0]}
+      scale={[0.013, 0.013, 0.013]}
     />
   );
 }
@@ -315,7 +339,7 @@ function App() {
   return (
     <>
       <div id="canvas-container">
-        <span hidden>Happy Birthday Motherucker</span>
+        <span hidden>Happy Birthday Motherfucker</span>
         <Canvas>
           <Suspense fallback={<LoadingScreen />}>
             <PerspectiveCamera makeDefault position={[6, 3, 0]} />
@@ -330,8 +354,10 @@ function App() {
               <Room />
               <ArcadeOne />
               <ArcadeTwo />
-              <ArcadeThree />
-              <ArcadeFour />
+              <BedTableOne />
+              <BedTableTwo />
+              <Speaker />
+              <RecordPlayer />
               <PinBall />
               <Couch />
               <Table />
