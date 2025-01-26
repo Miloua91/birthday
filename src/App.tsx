@@ -1,4 +1,4 @@
-import { useEffect, useRef, Suspense } from "react";
+import { useEffect, useRef, Suspense, useState } from "react";
 import * as THREE from "three";
 import { useFBX } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
@@ -11,24 +11,52 @@ import { useGLTF } from "@react-three/drei";
 useGLTF.preload("/bed.glb");
 
 function Flair() {
-  const fbx = useFBX("/swing.fbx");
+  const swing = useFBX("/swing.fbx");
+  const dance2 = useFBX("/Dancing.fbx");
+  const dance3 = useFBX("/soul.fbx");
+  const dance4 = useFBX("/hiphop.fbx");
   const mixer = useRef<THREE.AnimationMixer | null>(null);
+  const [currentDanceIndex, setCurrentDanceIndex] = useState(0);
+  const animationFrameId = useRef<number>();
 
   useEffect(() => {
-    if (fbx) {
-      mixer.current = new THREE.AnimationMixer(fbx);
+    const allAnimations = [
+      ...(dance4?.animations || []),
+      ...(dance3?.animations || []),
+      ...(swing?.animations || []),
+      ...(dance2?.animations || []),
+    ];
 
-      fbx.animations.forEach((clip) => {
-        const action = mixer.current!.clipAction(clip);
-        action.play();
-        action.setLoop(THREE.LoopRepeat, Infinity);
-      });
+    if (swing) {
+      mixer.current = new THREE.AnimationMixer(swing);
+
+      const playNextDance = () => {
+        if (mixer.current) {
+          const currentAnimations = allAnimations[currentDanceIndex];
+          const action = mixer.current.clipAction(currentAnimations);
+          mixer.current.timeScale = 1;
+
+          action.reset();
+          action.setLoop(THREE.LoopOnce, 1);
+          action.clampWhenFinished = true;
+
+          const handleFinished = () => {
+            mixer.current?.removeEventListener("finished", handleFinished);
+            setCurrentDanceIndex((prev) => (prev + 1) % allAnimations.length);
+          };
+
+          mixer.current.addEventListener("finished", handleFinished);
+          action.play();
+        }
+      };
+
+      playNextDance();
 
       const animate = () => {
         if (mixer.current) {
           mixer.current.update(0.02);
         }
-        requestAnimationFrame(animate);
+        animationFrameId.current = requestAnimationFrame(animate);
       };
       animate();
     }
@@ -37,12 +65,15 @@ function Flair() {
       if (mixer.current) {
         mixer.current.stopAllAction();
       }
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
     };
-  }, [fbx]);
+  }, [swing, dance2, dance3, currentDanceIndex]);
 
   return (
     <primitive
-      object={fbx}
+      object={swing}
       scale={[0.8, 0.8, 0.8]}
       position={[2.1, 0, -0.8]}
       rotation={[0, 0, 0]}
@@ -73,6 +104,18 @@ function ArcadeTwo() {
       object={gltf.scene}
       position={[0.9, 0, -0.4]}
       rotation={[0, Math.PI / 2, 0]}
+      scale={[1.2, 1.1, 1.3]}
+    />
+  );
+}
+
+function Fender() {
+  const gltf = useGLTF("/fender_pj_bass.glb");
+  return (
+    <primitive
+      object={gltf.scene}
+      position={[-1.8, 0.62, -1.728]}
+      rotation={[-0.2, 0.18, 0]}
       scale={[1.2, 1.1, 1.3]}
     />
   );
@@ -339,7 +382,7 @@ function App() {
   return (
     <>
       <div id="canvas-container">
-        <span hidden>Happy Birthday Motherfucker</span>
+        <span style={{ fontSize: 20 }}>Happy Birthday Madjid 🎂✨</span>
         <Canvas>
           <Suspense fallback={<LoadingScreen />}>
             <PerspectiveCamera makeDefault position={[6, 3, 0]} />
@@ -354,6 +397,7 @@ function App() {
               <Room />
               <ArcadeOne />
               <ArcadeTwo />
+              <Fender />
               <BedTableOne />
               <BedTableTwo />
               <Speaker />
@@ -401,7 +445,7 @@ function TvWithVideo() {
 
     const screenMesh = gltf.scene.getObjectByName("TV_49Zoll_Screen1_0");
     if (screenMesh && screenMesh instanceof THREE.Mesh) {
-      videoTexture.repeat.set(1.8, 3);
+      videoTexture.repeat.set(1.8, 2.9);
       screenMesh.material = new THREE.MeshBasicMaterial({ map: videoTexture });
     }
 
