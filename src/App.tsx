@@ -1,6 +1,6 @@
 import { useEffect, useRef, Suspense, useState } from "react";
 import * as THREE from "three";
-import { useFBX } from "@react-three/drei";
+import { Environment, useFBX } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
 import { Html, useProgress } from "@react-three/drei";
@@ -385,7 +385,7 @@ function App() {
         <span style={{ fontSize: 20 }}>Happy Birthday Madjid 🎂✨</span>
         <Canvas>
           <Suspense fallback={<LoadingScreen />}>
-            <PerspectiveCamera makeDefault position={[6, 3, 0]} />
+            <PerspectiveCamera makeDefault position={[6.4, 1, 1]} />
             <OrbitControls target={[0, 0, 0]} />
             <ambientLight intensity={1} />
             <directionalLight
@@ -393,7 +393,8 @@ function App() {
               color="white"
               position={[5, 5, 5]}
             />
-            <mesh position={[0, 0, 0]}>
+            <Environment background files={"/HDR_blue_nebulae-1.hdr"} />
+            <mesh position={[1, -0.5, 0]}>
               <Room />
               <ArcadeOne />
               <ArcadeTwo />
