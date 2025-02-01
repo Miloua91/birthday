@@ -4,6 +4,7 @@ import { Environment, useFBX } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { PerspectiveCamera, OrbitControls } from "@react-three/drei";
 import { Html, useProgress } from "@react-three/drei";
+import config from "../config.ts";
 import "./App.css";
 
 import { useGLTF } from "@react-three/drei";
@@ -382,7 +383,7 @@ function App() {
   return (
     <>
       <div id="canvas-container">
-        <span style={{ fontSize: 20 }}>Happy Birthday Madjid 🎂✨</span>
+        <span style={{ fontSize: 20 }}>{config.birthdayMsg}</span>
         <Canvas>
           <Suspense fallback={<LoadingScreen />}>
             <PerspectiveCamera makeDefault position={[6.4, 1, 1]} />
@@ -493,7 +494,7 @@ function LoadingScreen() {
           fontWeight: "bold",
         }}
       >
-        🎉 Happy Birthday Madjid! My Ninja 🎂 <br />
+        🎉 Happy Birthday {config.birthdayName}!🎂 <br />
         Loading... {Math.round(progress)}%
       </div>
     </Html>
