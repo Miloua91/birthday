@@ -1,50 +1,39 @@
-# React + TypeScript + Vite
+# 3D Birthday Room
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fun and interactive 3D birthday website built with React Three Fiber. This project creates a virtual birthday room where users can explore a space filled with arcade machines, music, decorations, and a dancing Deadpool to celebrate a friend's special day!
 
-Currently, two official plugins are available:
+# Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+A cozy room with furniture, arcade machines, and a birthday setup. A dancing Deadpool to enhance the birthday vibe, the room is interactive so you can explore it. There is cake, balloons, and a special message. Music & arcade vibes to enhance the celebration mood.
 
-## Expanding the ESLint configuration
+# Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- React - For the UI framework.
+- React Three Fiber - For rendering 3D models.
+- Three.js - For 3D graphics.
+- GLB Models - For realistic assets.
 
-- Configure the top-level `parserOptions` property like this:
+## Check the website
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+[Visit 3D Birthday Room](https://happy-birthday-madjid.vercel.app/)
+
+# Host Your Own 3D Birthday Room
+
+Clone the repository:
+```sh
+git clone https://github.com/Miloua91/birthday.git
+```
+Navigate to the project folder:
+```sh
+cd birthday
+```
+Install dependencies:
+```sh
+npm install
+```
+Start the development server:
+```sh
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+Change the loading and birthday message in **config.ts** and share it!
