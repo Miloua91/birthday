@@ -494,7 +494,7 @@ function LoadingScreen() {
           fontWeight: "bold",
         }}
       >
-        🎉 Happy Birthday {config.birthdayName}!🎂 <br />
+        {config.LoadingMsg} <br />
         Loading... {Math.round(progress)}%
       </div>
     </Html>
